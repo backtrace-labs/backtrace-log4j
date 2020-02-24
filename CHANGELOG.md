@@ -1,0 +1,1 @@
+# Backtrace Log4j Release Notes
