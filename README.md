@@ -60,7 +60,7 @@ backtrace.await();
 ```
 
 # Closing 
-To make sure that all resources allocated by the library are released, call the close method. This method will send the currently processed message and then free all resources. Below you can find example how to do it.
+To make sure that all resources allocated by the library are released, call the `close` method. This method will send the currently processed message and then free all resources. Below you can find example how to do it.
 
 ```java
 BacktraceAppender backtrace = (BacktraceAppender) Logger.getRootLogger().getAppender(BacktraceAppender.NAME);
