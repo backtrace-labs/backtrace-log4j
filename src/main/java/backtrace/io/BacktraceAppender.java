@@ -227,7 +227,7 @@ public class BacktraceAppender extends AppenderSkeleton {
     }
 
     /**
-     * Create instance of Backtrace Client based on passed properties
+     * Create instance of Backtrace Client based on properties from configuration file (eg. log4j.properties)
      *
      * @return Backtrace library configuration
      */
