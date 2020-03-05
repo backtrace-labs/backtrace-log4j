@@ -1,47 +1,93 @@
 package backtrace.io;
 
 import backtrace.io.data.BacktraceReport;
-import org.apache.log4j.AppenderSkeleton;
-import org.apache.log4j.helpers.LogLog;
-import org.apache.log4j.spi.Filter;
-import org.apache.log4j.spi.LoggingEvent;
-import org.apache.log4j.spi.ThrowableInformation;
+import org.apache.logging.log4j.core.*;
+import org.apache.logging.log4j.core.appender.AbstractAppender;
+import org.apache.logging.log4j.core.config.Property;
+import org.apache.logging.log4j.core.config.plugins.Plugin;
+import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
+import org.apache.logging.log4j.core.config.plugins.PluginElement;
+import org.apache.logging.log4j.core.config.plugins.PluginFactory;
+import org.apache.logging.log4j.status.StatusLogger;
+import org.apache.logging.log4j.util.SortedArrayStringMap;
+import org.apache.logging.log4j.util.StringMap;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-
-public class BacktraceAppender extends AppenderSkeleton {
-    public final static String NAME = "backtrace";
-    private final static String ATTRIBUTE_LOGGING_LEVEL_NAME = "log_level";
-    // Backtrace config
+@Plugin(
+        name = "BacktraceAppender",
+        category = Core.CATEGORY_NAME,
+        elementType = Appender.ELEMENT_TYPE)
+public class BacktraceAppender extends AbstractAppender {
     private BacktraceClient backtraceClient;
-    private String endpointUrl;
-    private String submissionToken;
-    private String submissionUrl;
-    private boolean enableUncaughtExceptionHandler;
-    // Application attributes
-    private String appVersion;
-    private String appName;
-    // Database settings
-    private boolean useDatabase = true;
-    private Long maxDatabaseSize;
-    private Integer maxDatabaseRecordCount;
-    private Integer maxDatabaseRetryLimit;
 
-    public BacktraceAppender() {
-        this.addFilter(new Filter() {
-            @Override
-            public int decide(LoggingEvent event) {
-                String loggerName = event.getLoggerName();
-                if (loggerName != null && loggerName.startsWith(NAME)) {
-                    return Filter.DENY;
-                }
-                return Filter.NEUTRAL;
-            }
-        });
+    public final static String NAME = "backtrace";
+    private final StatusLogger internalLogger = StatusLogger.getLogger();
+    private final static String ATTRIBUTE_LOGGING_LEVEL_NAME = "log_level";
+
+    BacktraceAppender(BacktraceClient backtraceClient, String name, Filter filter, Layout<? extends Serializable> layout, boolean ignoreExceptions, Property[] properties) {
+        super(name, filter, layout, ignoreExceptions, properties);
+        this.backtraceClient = backtraceClient;
+
+
+//        this.addFilter(new Filter() {
+//            @Override
+//            private Result filter(String loggerName) {
+//                if (loggerName != null && loggerName.startsWith(NAME)) {
+//                    return Result.DENY;
+//                }
+//                return Result.NEUTRAL;
+//            }
+//        });
     }
+
+    @PluginFactory
+    @SuppressWarnings("unused")
+    public static BacktraceAppender createAppender(
+            @PluginAttribute("name") String name,
+            @PluginElement("Layout") Layout<? extends Serializable> layout,
+            @PluginElement("Filter") final Filter filter,
+            @PluginAttribute("endpointUrl") String endpointUrl,
+            @PluginAttribute("submissionToken") String submissionToken,
+            @PluginAttribute("submissionUrl") String submissionUrl,
+            @PluginAttribute("enableUncaughtExceptionHandler") boolean enableUncaughtExceptionHandler,
+            @PluginAttribute("appVersion") String appVersion,
+            @PluginAttribute("appName") String appName,
+            @PluginAttribute("useDatabase") boolean useDatabase,
+            @PluginAttribute("maxDatabaseSize") long maxDatabaseSize,
+            @PluginAttribute("maxDatabaseRecordCount") Integer maxDatabaseRecordCount,
+            @PluginAttribute("maxDatabaseRetryLimit") Integer maxDatabaseRetryLimit
+    ) {
+        if (name == null) {
+            LOGGER.error("No name provided for BacktraceAppender");
+            return null;
+        }
+
+        BacktraceConfig backtraceConfig = BacktraceAppender.createBacktraceConfig(submissionUrl, endpointUrl, submissionToken,
+                useDatabase, maxDatabaseSize,
+                maxDatabaseRecordCount, maxDatabaseRetryLimit);
+
+        BacktraceClient backtraceClient = BacktraceAppender.createBacktraceClient(backtraceConfig, enableUncaughtExceptionHandler, appName, appVersion);
+
+        return new BacktraceAppender(backtraceClient, name, filter, layout, true, null);
+    }
+
+//
+//    public BacktraceAppender() {
+//        this.addFilter(new Filter() {
+//            @Override
+//            public int decide(LoggingEvent event) {
+//                String loggerName = event.getLoggerName();
+//                if (loggerName != null && loggerName.startsWith(NAME)) {
+//                    return Filter.DENY;
+//                }
+//                return Filter.NEUTRAL;
+//            }
+//        });
+//    }
 
     /**
      * Check is passed string is not null and not empty otherwise true
@@ -53,130 +99,18 @@ public class BacktraceAppender extends AppenderSkeleton {
         // Null-safe, short-circuit evaluation.
         return !(s == null || s.trim().isEmpty());
     }
-
-    private BacktraceClient getBacktraceClient() {
-        return backtraceClient;
-    }
-
-    private void setBacktraceClient(BacktraceClient backtraceClient) {
-        this.backtraceClient = backtraceClient;
-    }
-
-    private String getEndpointUrl() {
-        return endpointUrl;
-    }
-
-    @SuppressWarnings("unused")
-    public void setEndpointUrl(String endpointUrl) {
-        this.endpointUrl = endpointUrl;
-    }
-
-    private String getSubmissionToken() {
-        return submissionToken;
-    }
-
-    @SuppressWarnings("unused")
-    public void setSubmissionToken(String submissionToken) {
-        this.submissionToken = submissionToken;
-    }
-
-    private String getSubmissionUrl() {
-        return submissionUrl;
-    }
-
-    @SuppressWarnings("unused")
-    public void setSubmissionUrl(String submissionUrl) {
-        this.submissionUrl = submissionUrl;
-    }
-
-    private boolean isEnableUncaughtExceptionHandler() {
-        return enableUncaughtExceptionHandler;
-    }
-
-    @SuppressWarnings("unused")
-    public void setEnableUncaughtExceptionHandler(boolean enableUncaughtExceptionHandler) {
-        this.enableUncaughtExceptionHandler = enableUncaughtExceptionHandler;
-    }
-
-    private String getAppVersion() {
-        return appVersion;
-    }
-
-    @SuppressWarnings("unused")
-    public void setAppVersion(String appVersion) {
-        this.appVersion = appVersion;
-    }
-
-    private String getAppName() {
-        return appName;
-    }
-
-    @SuppressWarnings("unused")
-    public void setAppName(String appName) {
-        this.appName = appName;
-    }
-
-    private boolean isUseDatabase() {
-        return useDatabase;
-    }
-
-    @SuppressWarnings("unused")
-    public void setUseDatabase(boolean useDatabase) {
-        this.useDatabase = useDatabase;
-    }
-
-    private Integer getMaxDatabaseRetryLimit() {
-        return maxDatabaseRetryLimit;
-    }
-
-    @SuppressWarnings("unused")
-    public void setMaxDatabaseRetryLimit(int maxDatabaseRetryLimit) {
-        this.maxDatabaseRetryLimit = maxDatabaseRetryLimit;
-    }
-
-    private Long getMaxDatabaseSize() {
-        return maxDatabaseSize;
-    }
-
-    @SuppressWarnings("unused")
-    public void setMaxDatabaseSize(long maxDatabaseSize) {
-        this.maxDatabaseSize = maxDatabaseSize;
-    }
-
-    private Integer getMaxDatabaseRecordCount() {
-        return maxDatabaseRecordCount;
-    }
-
-    @SuppressWarnings("unused")
-    public void setMaxDatabaseRecordCount(int maxDatabaseRecordCount) {
-        this.maxDatabaseRecordCount = maxDatabaseRecordCount;
-    }
-
-    /**
-     * Initialize the appender
-     */
-    @Override
-    public void activateOptions() {
-        BacktraceConfig config = createBacktraceConfig();
-        this.configureBacktraceDatabaseSettings(config);
-
-        BacktraceClient backtraceClient = new BacktraceClient(config);
-        setBacktraceClient(backtraceClient);
-
-        configureBacktraceClient(getBacktraceClient());
-    }
-
+    
     /**
      * Send log message to Backtrace console
      */
     @Override
-    public void append(LoggingEvent event) {
-        if (event == null) {
+    public void append(LogEvent logEvent) {
+        if (logEvent == null) {
             return;
         }
 
-        LogLog.debug("Sending report with message " + event.getRenderedMessage());
-        BacktraceReport report = createBacktraceReport(event);
+        internalLogger.debug("Sending report with message " + logEvent.getMessage().getFormattedMessage());
+        BacktraceReport report = createBacktraceReport(logEvent);
         this.backtraceClient.send(report);
     }
 
@@ -185,24 +119,16 @@ public class BacktraceAppender extends AppenderSkeleton {
      * Close all of Backtrace library resources and wait until last of messages will be process and
      */
     @Override
-    public void close() {
-        LogLog.debug("Closing BacktraceAppender");
+    public void stop() {
+//        LogLog.debug("Closing BacktraceAppender");
         try {
+            super.stop();
             this.backtraceClient.close();
         } catch (InterruptedException e) {
-            LogLog.error("Error occurs during closing Backtrace client", e);
+            internalLogger.error("Error occurs during closing Backtrace client", e);
         }
     }
 
-    /**
-     * The BacktraceAppender doesn't require a layout. Hence, this method returns false
-     *
-     * @return false
-     */
-    @Override
-    public boolean requiresLayout() {
-        return false;
-    }
 
     /**
      * Wait until last of messages will be process and close all of Backtrace library resources
@@ -231,71 +157,71 @@ public class BacktraceAppender extends AppenderSkeleton {
      *
      * @return Backtrace library configuration
      */
-    BacktraceConfig createBacktraceConfig() {
-        String submissionUrl = this.getSubmissionUrl();
-        if (isStringNotEmpty(submissionUrl)) {
-            return new BacktraceConfig(submissionUrl);
-        }
-        return new BacktraceConfig(getEndpointUrl(), getSubmissionToken());
-    }
+    private static BacktraceConfig createBacktraceConfig(String submissionUrl, String endpointUrl, String submissionToken,
+                                                 boolean useDatabase, Long maxDatabaseSize,
+                                                 Integer maxDatabaseRecordCount, Integer maxDatabaseRetryLimit) {
+        BacktraceConfig backtraceConfig = isStringNotEmpty(submissionUrl) ? new BacktraceConfig(submissionUrl) : new BacktraceConfig(endpointUrl, submissionToken);
 
-    /**
-     * Set in Backtrace configuration all options related to database
-     *
-     * @param backtraceConfig backtrace library configuration
-     */
-    private void configureBacktraceDatabaseSettings(BacktraceConfig backtraceConfig) {
-        if (!this.isUseDatabase()) {
+        if (useDatabase) {
             backtraceConfig.disableDatabase();
-            return;
+            return backtraceConfig;
         }
 
-        if (this.getMaxDatabaseSize() != null) {
-            backtraceConfig.setMaxDatabaseSize(this.getMaxDatabaseSize());
+        if (maxDatabaseSize != null) {
+            backtraceConfig.setMaxDatabaseSize(maxDatabaseSize);
         }
-        if (this.getMaxDatabaseRecordCount() != null) {
-            backtraceConfig.setMaxRecordCount(this.getMaxDatabaseRecordCount());
+
+        if (maxDatabaseRecordCount != null) {
+            backtraceConfig.setMaxRecordCount(maxDatabaseRecordCount);
         }
-        if (this.getMaxDatabaseRetryLimit() != null) {
-            backtraceConfig.setDatabaseRetryLimit(this.getMaxDatabaseRetryLimit());
+
+        if (maxDatabaseRetryLimit != null) {
+            backtraceConfig.setDatabaseRetryLimit(maxDatabaseRetryLimit);
         }
+
+        return backtraceConfig;
     }
 
     /**
      * Configure Backtrace Client - enable uncaught exception handler, set app name and app version
-     *
-     * @param client Backtrace client instance
+     * @param config
+     * @param isEnableUncaughtExceptionHandler
+     * @param appName
+     * @param appVersion
+     * @return configured Backtrace Client instance
      */
-    private void configureBacktraceClient(BacktraceClient client) {
-        if (this.isEnableUncaughtExceptionHandler()) {
+    static BacktraceClient createBacktraceClient(BacktraceConfig config, boolean isEnableUncaughtExceptionHandler, String appName, String appVersion) {
+
+        BacktraceClient client = new BacktraceClient(config);
+        if (isEnableUncaughtExceptionHandler) {
             client.enableUncaughtExceptionsHandler();
         }
 
-        String appName = this.getAppName();
         if (isStringNotEmpty(appName)) {
             client.setApplicationName(appName);
         }
 
-        String appVersion = this.getAppVersion();
         if (isStringNotEmpty(appVersion)) {
             client.setApplicationVersion(appVersion);
         }
+
+        return client;
     }
 
     /**
      * Get attributes from logging event
      *
-     * @param loggingEvent representation of logging events
+     * @param logEvent representation of logging events
      * @return map with attributes
      */
-    private static Map<String, Object> getAttributes(LoggingEvent loggingEvent) {
+    private static Map<String, Object> getAttributes(LogEvent logEvent) {
         Map<String, Object> attributes = new HashMap<>();
 
-        attributes.put(ATTRIBUTE_LOGGING_LEVEL_NAME, loggingEvent.getLevel().toString());
-        Map<String, Object> properties = (Map<String, Object>) loggingEvent.getProperties();
+        attributes.put(ATTRIBUTE_LOGGING_LEVEL_NAME, logEvent.getLevel().toString());
+        Map<String, String> properties = logEvent.getContextData().toMap();
 
         if (properties.size() != 0) {
-            for (Map.Entry<String, Object> mdcEntry : properties.entrySet()) {
+            for (Map.Entry<String, String> mdcEntry : properties.entrySet()) {
                 attributes.put(mdcEntry.getKey(), mdcEntry.getValue());
             }
         }
@@ -306,20 +232,21 @@ public class BacktraceAppender extends AppenderSkeleton {
     /**
      * Generate BacktraceReport based on logging event
      *
-     * @param event representation of logging events
+     * @param logEvent representation of logging events
      * @return Backtrace report
      */
-    static BacktraceReport createBacktraceReport(LoggingEvent event) {
+    static BacktraceReport createBacktraceReport(LogEvent logEvent) {
         BacktraceReport report;
-        ThrowableInformation throwableInformation = event.getThrowableInformation();
-        Map<String, Object> attributes = getAttributes(event);
+        Throwable throwable = logEvent.getThrown();
+        Map<String, Object> attributes = getAttributes(logEvent);
 
-        if (throwableInformation != null) {
-            Exception exception = (Exception) throwableInformation.getThrowable();
-            report = new BacktraceReport(exception, attributes);
+        if (throwable != null) {
+            report = new BacktraceReport((Exception) throwable, attributes);
         } else {
-            report = new BacktraceReport(event.getRenderedMessage(), attributes);
+            report = new BacktraceReport(logEvent.getMessage().getFormattedMessage(), attributes);
         }
         return report;
     }
+
+
 }
