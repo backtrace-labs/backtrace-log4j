@@ -37,7 +37,7 @@ public class BacktraceAppender extends AppenderSkeleton {
             @Override
             public int decide(LoggingEvent event) {
                 String loggerName = event.getLoggerName();
-                if (loggerName != null && loggerName.toLowerCase().startsWith(NAME)) {
+                if (loggerName != null && loggerName.startsWith(NAME)) {
                     return Filter.DENY;
                 }
                 return Filter.NEUTRAL;
@@ -296,7 +296,7 @@ public class BacktraceAppender extends AppenderSkeleton {
         attributes.put(ATTRIBUTE_LOGGING_LEVEL_NAME, loggingEvent.getLevel().toString());
         Map<String, Object> properties = (Map<String, Object>) loggingEvent.getProperties();
 
-        if (properties.size() != 0){
+        if (properties.size() != 0) {
             for (Map.Entry<String, Object> mdcEntry : properties.entrySet()) {
                 attributes.put(mdcEntry.getKey(), mdcEntry.getValue());
             }
