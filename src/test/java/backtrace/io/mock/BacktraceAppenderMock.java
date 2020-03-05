@@ -17,7 +17,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.slf4j.MDC;
 
-public class BacktraceAppenderMock extends BacktraceAppender {
+public final class BacktraceAppenderMock extends BacktraceAppender {
     private BacktraceConfig config;
 
     public void setBacktraceConfig(BacktraceConfig config) {
