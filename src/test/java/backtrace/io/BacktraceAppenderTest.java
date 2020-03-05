@@ -9,6 +9,7 @@ import net.jodah.concurrentunit.Waiter;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 import org.apache.log4j.helpers.LogLog;
 import org.apache.log4j.spi.LoggingEvent;
 import org.junit.Before;
@@ -188,5 +189,59 @@ public class BacktraceAppenderTest {
 
         // THEN
         appender.await(1, TimeUnit.SECONDS);
+    }
+
+    @Test
+    public void logExceptionWithErrorLevelFromLogger() throws Exception {
+        // GIVEN
+        final Waiter waiter = new Waiter();
+        final Exception exception = new Exception("test message");
+        this.config.setRequestHandler(new RequestHandler() {
+            @Override
+            public BacktraceResult onRequest(BacktraceData data) {
+                waiter.assertEquals(exception, data.getReport().getException());
+                waiter.resume();
+                return BacktraceResult.onSuccess(data.getReport(), "");
+            }
+        });
+
+        Logger logger = Logger.getRootLogger();
+        BacktraceAppenderMock appender = new BacktraceAppenderMock();
+        appender.setBacktraceConfig(config);
+        appender.activateOptions();
+        logger.addAppender(appender);
+
+        // WHEN
+        logger.error("", exception);
+
+        // THEN
+        waiter.await(1000, 1);
+    }
+
+    @Test
+    public void logMessageWithDebugLevelFromLogger() throws Exception {
+        // GIVEN
+        final Waiter waiter = new Waiter();
+        final String message = "test message";
+        this.config.setRequestHandler(new RequestHandler() {
+            @Override
+            public BacktraceResult onRequest(BacktraceData data) {
+                waiter.assertEquals(message, data.getReport().getMessage());
+                waiter.resume();
+                return BacktraceResult.onSuccess(data.getReport(), "");
+            }
+        });
+
+        Logger logger = Logger.getRootLogger();
+        BacktraceAppenderMock appender = new BacktraceAppenderMock();
+        appender.setBacktraceConfig(config);
+        appender.activateOptions();
+        logger.addAppender(appender);
+
+        // WHEN
+        logger.debug(message);
+
+        // THEN
+        waiter.await(1000, 1);
     }
 }
