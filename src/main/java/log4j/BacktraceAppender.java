@@ -27,7 +27,7 @@ public class BacktraceAppender extends AppenderSkeleton {
     private String appVersion;
     private String appName;
     // Database settings
-    private boolean disableDatabase;
+    private boolean useDatabase = true;
     private Long maxDatabaseSize;
     private Integer maxDatabaseRecordCount;
     private Integer maxDatabaseRetryLimit;
@@ -118,13 +118,13 @@ public class BacktraceAppender extends AppenderSkeleton {
         this.appName = appName;
     }
 
-    private boolean isDisableDatabase() {
-        return disableDatabase;
+    private boolean isUseDatabase() {
+        return useDatabase;
     }
 
     @SuppressWarnings("unused")
-    public void setDisableDatabase(boolean disableDatabase) {
-        this.disableDatabase = disableDatabase;
+    public void setUseDatabase(boolean useDatabase) {
+        this.useDatabase = useDatabase;
     }
 
     private Integer getMaxDatabaseRetryLimit() {
@@ -247,7 +247,7 @@ public class BacktraceAppender extends AppenderSkeleton {
      * @param backtraceConfig backtrace library configuration
      */
     private void configureBacktraceDatabaseSettings(BacktraceConfig backtraceConfig) {
-        if (this.isDisableDatabase()) {
+        if (!this.isUseDatabase()) {
             backtraceConfig.disableDatabase();
             return;
         }

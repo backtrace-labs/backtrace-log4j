@@ -45,7 +45,7 @@ log4j.appender.backtrace.submissionToken=<submissionToken>
 - `appVersion` - string value which represents your's application version
 - `appName` - string value which represents your's application name
 - `enableUncaughtExceptionHandler` - boolean value, if `true` library will catch all uncaught exceptions and send to server
-- `disableDatabase` - boolean value, if `true` library will not be using any files to store reports, otherwise (also if this parameter is not specified) the library will store unsent messages in files
+- `useDatabase` - boolean value, if `false` library will not be using any files to store reports, otherwise (also if this parameter is not specified) the library will store unsent messages in files
 - `maxDatabaseSize` - maximum database size in bytes, by default size is unlimited
 - `maxDatabaseRecordCount` - number of times library will try to send the error report again if sending will finished with fail
 - `maxDatabaseRetryLimit` - maximum number of messages in database. If a limit is set, the oldest error reports will be deleted if there will be try to exceed the limit
