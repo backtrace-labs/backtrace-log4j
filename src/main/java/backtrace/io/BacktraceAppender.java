@@ -1,7 +1,5 @@
-package log4j;
+package backtrace.io;
 
-import backtrace.io.BacktraceClient;
-import backtrace.io.BacktraceConfig;
 import backtrace.io.data.BacktraceReport;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.helpers.LogLog;
@@ -233,7 +231,7 @@ public class BacktraceAppender extends AppenderSkeleton {
      *
      * @return Backtrace library configuration
      */
-    protected BacktraceConfig createBacktraceConfig() {
+    BacktraceConfig createBacktraceConfig() {
         String submissionUrl = this.getSubmissionUrl();
         if (isStringNotEmpty(submissionUrl)) {
             return new BacktraceConfig(submissionUrl);
@@ -311,7 +309,7 @@ public class BacktraceAppender extends AppenderSkeleton {
      * @param event representation of logging events
      * @return Backtrace report
      */
-    protected static BacktraceReport createBacktraceReport(LoggingEvent event) {
+    static BacktraceReport createBacktraceReport(LoggingEvent event) {
         BacktraceReport report;
         ThrowableInformation throwableInformation = event.getThrowableInformation();
         Map<String, Object> attributes = getAttributes(event);

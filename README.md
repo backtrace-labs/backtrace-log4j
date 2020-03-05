@@ -34,7 +34,7 @@ log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
 log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
 log4j.appender.CONSOLE.layout.ConversionPattern=%-4r [%t] %-5p %c %x - %m%n
 
-log4j.appender.backtrace=log4j.BacktraceAppender
+log4j.appender.backtrace=BacktraceAppender
 log4j.appender.backtrace.threshold=ERROR
 log4j.appender.backtrace.endpointUrl=https://<yourInstance>.sp.backtrace.io:6098/
 log4j.appender.backtrace.submissionToken=<submissionToken>
