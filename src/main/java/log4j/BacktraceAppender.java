@@ -311,7 +311,7 @@ public class BacktraceAppender extends AppenderSkeleton {
      * @param event representation of logging events
      * @return Backtrace report
      */
-    public static BacktraceReport createBacktraceReport(LoggingEvent event) {
+    protected static BacktraceReport createBacktraceReport(LoggingEvent event) {
         BacktraceReport report;
         ThrowableInformation throwableInformation = event.getThrowableInformation();
         Map<String, Object> attributes = getAttributes(event);

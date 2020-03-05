@@ -1,6 +1,7 @@
 package backtrace.io;
 
 import backtrace.io.data.BacktraceReport;
+import backtrace.io.mock.BacktraceAppenderMock;
 import log4j.BacktraceAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -21,7 +22,7 @@ public class BacktraceReportTest {
         LoggingEvent loggingEvent = new LoggingEvent(null, testLogger, level, message, null);
 
         // WHEN
-        BacktraceReport report = BacktraceAppender.createBacktraceReport(loggingEvent);
+        BacktraceReport report = BacktraceAppenderMock.createBacktraceReport(loggingEvent);
 
         // THEN
         Assert.assertEquals(loggingEvent.getRenderedMessage(), report.getMessage());
@@ -39,7 +40,7 @@ public class BacktraceReportTest {
         LoggingEvent loggingEvent = new LoggingEvent(null, testLogger, level, null, exception);
 
         // WHEN
-        BacktraceReport report = BacktraceAppender.createBacktraceReport(loggingEvent);
+        BacktraceReport report = BacktraceAppenderMock.createBacktraceReport(loggingEvent);
 
         // THEN
         Assert.assertEquals(loggingEvent.getRenderedMessage(), report.getMessage());

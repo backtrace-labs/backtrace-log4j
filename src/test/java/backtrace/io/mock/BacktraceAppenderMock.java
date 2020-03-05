@@ -2,6 +2,7 @@ package backtrace.io.mock;
 
 import backtrace.io.BacktraceConfig;
 import backtrace.io.data.BacktraceData;
+import backtrace.io.data.BacktraceReport;
 import backtrace.io.events.RequestHandler;
 import backtrace.io.http.BacktraceResult;
 import log4j.BacktraceAppender;
@@ -31,6 +32,10 @@ public final class BacktraceAppenderMock extends BacktraceAppender {
     @Override
     protected BacktraceConfig createBacktraceConfig() {
         return getBacktraceConfig();
+    }
+
+    public static BacktraceReport createBacktraceReport(LoggingEvent event) {
+        return BacktraceAppender.createBacktraceReport(event);
     }
 }
 
