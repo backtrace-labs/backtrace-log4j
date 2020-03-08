@@ -50,7 +50,7 @@ public class BacktraceConfigureAppender {
         BacktraceConfig config = appender.getBacktraceConfig();
 
         // WHEN
-        appender.setDisableDatabase(true);
+        appender.setUseDatabase(false);
         appender.activateOptions();
 
         // THEN
