@@ -1,29 +1,33 @@
 package app;
 
-import log4j.BacktraceAppender;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.config.DefaultConfiguration;
+
 
 public class Demo {
 
 
     public static void main(String[] args) throws InterruptedException {
-
-        BasicConfigurator.configure();
-        Logger logger = Logger.getLogger(Demo.class);
-//        logger.info("test");
+//        Configurator.initialize(new DefaultConfiguration());
+        Logger logger = LogManager.getLogger(Demo.class);
         try{
             int x = 0;
             int y = 0;
             int w = x/(y);
         }
         catch (Exception exception){
-            logger.error("Welcome from MAIN - log4j", exception);
+            logger.error("[LOG4J2] Welcome from MAIN");
         }
 
-        BacktraceAppender x = (BacktraceAppender)Logger.getRootLogger().getAppender(BacktraceAppender.NAME);
+//        LoggerConfig.RootLogger.
+//        BacktraceAppender x = (BacktraceAppender)Logger.getAppender(BacktraceAppender.NAME);
 //        x.getBacktraceClient().close();
-        x.await();
+//        x.await();
+//        Logger rootLogger = LogManager.getRootLogger();
+
+        Thread.sleep(10000);
         System.out.println("WORKS");
     }
 }

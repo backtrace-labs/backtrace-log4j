@@ -1,5 +1,7 @@
-package backtrace.io;
+package backtrace.io.log4j2;
 
+import backtrace.io.BacktraceClient;
+import backtrace.io.BacktraceConfig;
 import backtrace.io.data.BacktraceReport;
 import org.apache.logging.log4j.core.*;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
@@ -9,8 +11,6 @@ import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.status.StatusLogger;
-import org.apache.logging.log4j.util.SortedArrayStringMap;
-import org.apache.logging.log4j.util.StringMap;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -20,15 +20,15 @@ import java.util.concurrent.TimeUnit;
 @Plugin(
         name = "BacktraceAppender",
         category = Core.CATEGORY_NAME,
-        elementType = Appender.ELEMENT_TYPE)
-public class BacktraceAppender extends AbstractAppender {
+        elementType = org.apache.logging.log4j.core.Appender.ELEMENT_TYPE)
+public class Appender extends AbstractAppender {
     private BacktraceClient backtraceClient;
 
     public final static String NAME = "backtrace";
     private final StatusLogger internalLogger = StatusLogger.getLogger();
     private final static String ATTRIBUTE_LOGGING_LEVEL_NAME = "log_level";
 
-    BacktraceAppender(BacktraceClient backtraceClient, String name, Filter filter, Layout<? extends Serializable> layout, boolean ignoreExceptions, Property[] properties) {
+    Appender(BacktraceClient backtraceClient, String name, Filter filter, Layout<? extends Serializable> layout, boolean ignoreExceptions, Property[] properties) {
         super(name, filter, layout, ignoreExceptions, properties);
         this.backtraceClient = backtraceClient;
 
@@ -46,7 +46,7 @@ public class BacktraceAppender extends AbstractAppender {
 
     @PluginFactory
     @SuppressWarnings("unused")
-    public static BacktraceAppender createAppender(
+    public static Appender createAppender(
             @PluginAttribute("name") String name,
             @PluginElement("Layout") Layout<? extends Serializable> layout,
             @PluginElement("Filter") final Filter filter,
@@ -66,13 +66,13 @@ public class BacktraceAppender extends AbstractAppender {
             return null;
         }
 
-        BacktraceConfig backtraceConfig = BacktraceAppender.createBacktraceConfig(submissionUrl, endpointUrl, submissionToken,
+        BacktraceConfig backtraceConfig = Appender.createBacktraceConfig(submissionUrl, endpointUrl, submissionToken,
                 useDatabase, maxDatabaseSize,
                 maxDatabaseRecordCount, maxDatabaseRetryLimit);
 
-        BacktraceClient backtraceClient = BacktraceAppender.createBacktraceClient(backtraceConfig, enableUncaughtExceptionHandler, appName, appVersion);
+        BacktraceClient backtraceClient = Appender.createBacktraceClient(backtraceConfig, enableUncaughtExceptionHandler, appName, appVersion);
 
-        return new BacktraceAppender(backtraceClient, name, filter, layout, true, null);
+        return new Appender(backtraceClient, name, filter, layout, true, null);
     }
 
 //
