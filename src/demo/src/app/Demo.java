@@ -1,6 +1,6 @@
 package app;
 
-import log4j.BacktraceAppender;
+import backtrace.io.log4j12.Appender;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
@@ -21,7 +21,7 @@ public class Demo {
             logger.error("Welcome from MAIN - log4j", exception);
         }
 
-        BacktraceAppender x = (BacktraceAppender)Logger.getRootLogger().getAppender(BacktraceAppender.NAME);
+        Appender x = (Appender)Logger.getRootLogger().getAppender(Appender.NAME);
 //        x.getBacktraceClient().close();
         x.await();
         System.out.println("WORKS");

@@ -1,4 +1,4 @@
-package log4j;
+package backtrace.io.log4j12;
 
 import backtrace.io.BacktraceClient;
 import backtrace.io.BacktraceConfig;
@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
-public class BacktraceAppender extends AppenderSkeleton {
+public class Appender extends AppenderSkeleton {
     public final static String NAME = "backtrace";
     private final static String ATTRIBUTE_LOGGING_LEVEL_NAME = "log_level";
     // Backtrace config
@@ -32,7 +32,7 @@ public class BacktraceAppender extends AppenderSkeleton {
     private Integer maxDatabaseRecordCount;
     private Integer maxDatabaseRetryLimit;
 
-    public BacktraceAppender() {
+    public Appender() {
         this.addFilter(new Filter() {
             @Override
             public int decide(LoggingEvent event) {

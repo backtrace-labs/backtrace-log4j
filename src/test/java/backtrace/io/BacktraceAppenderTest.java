@@ -4,7 +4,7 @@ import backtrace.io.data.BacktraceData;
 import backtrace.io.events.RequestHandler;
 import backtrace.io.http.BacktraceResult;
 import backtrace.io.mock.BacktraceAppenderMock;
-import log4j.BacktraceAppender;
+import backtrace.io.log4j12.Appender;
 import net.jodah.concurrentunit.Waiter;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
@@ -34,7 +34,7 @@ public class BacktraceAppenderTest {
 
     @Test
     public void appendNullMessage() {
-        BacktraceAppender appender = new BacktraceAppender();
+        Appender appender = new Appender();
         appender.setSubmissionUrl(URL);
         appender.activateOptions();
         appender.append(null);
@@ -178,7 +178,7 @@ public class BacktraceAppenderTest {
         appender.setBacktraceConfig(config);
         appender.activateOptions();
 
-        final LoggingEvent loggingEvent = new LoggingEvent(null, new Logger(BacktraceAppender.NAME) {
+        final LoggingEvent loggingEvent = new LoggingEvent(null, new Logger(Appender.NAME) {
         }, Level.DEBUG, message, null) {
         };
 
