@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Appender extends AppenderSkeleton {
-    public final static String NAME = "backtrace";
+    private final static String NAME = "backtrace.io";
     private final static String ATTRIBUTE_LOGGING_LEVEL_NAME = "log_level";
     // Backtrace config
     private BacktraceClient backtraceClient;

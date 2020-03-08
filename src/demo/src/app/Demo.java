@@ -21,7 +21,7 @@ public class Demo {
             logger.error("Welcome from MAIN - log4j", exception);
         }
 
-        Appender x = (Appender)Logger.getRootLogger().getAppender(Appender.NAME);
+        Appender x = (Appender)Logger.getRootLogger().getAppender("backtrace");
 //        x.getBacktraceClient().close();
         x.await();
         System.out.println("WORKS");

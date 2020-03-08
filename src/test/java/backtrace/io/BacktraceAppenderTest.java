@@ -178,7 +178,7 @@ public class BacktraceAppenderTest {
         appender.setBacktraceConfig(config);
         appender.activateOptions();
 
-        final LoggingEvent loggingEvent = new LoggingEvent(null, new Logger(Appender.NAME) {
+        final LoggingEvent loggingEvent = new LoggingEvent(null, new Logger("backtrace") {
         }, Level.DEBUG, message, null) {
         };
 

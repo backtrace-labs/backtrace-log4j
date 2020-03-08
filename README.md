@@ -55,7 +55,7 @@ log4j.appender.backtrace.submissionToken=<submissionToken>
 By default Backtrace is sending all messages asynchronously and doesn't block main thread. You can wait until all currently messages will be sent with executing method `await`. Optionally as a parameter to `await` method you can pass the maximum time you want to wait for that.
 
 ```java
-BacktraceAppender backtrace = (BacktraceAppender) Logger.getRootLogger().getAppender(BacktraceAppender.NAME);
+BacktraceAppender backtrace = (BacktraceAppender) Logger.getRootLogger().getAppender("backtrace");
 backtrace.await();
 ```
 
@@ -63,6 +63,6 @@ backtrace.await();
 To make sure that all resources allocated by the library are released, call the `close` method. This method will send the currently processed message and then free all resources. Below you can find example how to do it.
 
 ```java
-BacktraceAppender backtrace = (BacktraceAppender) Logger.getRootLogger().getAppender(BacktraceAppender.NAME);
+BacktraceAppender backtrace = (BacktraceAppender) Logger.getRootLogger().getAppender("backtrace");
 backtrace.close();
 ```
