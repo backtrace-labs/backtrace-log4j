@@ -45,7 +45,7 @@ log4j.appender.backtrace.submissionToken=<submissionToken>
 - `appVersion` - string value which represents your's application version
 - `appName` - string value which represents your's application name
 - `enableUncaughtExceptionHandler` - boolean value, if `true` library will catch all uncaught exceptions and send to server
-- `useDatabase` - boolean value, if `false` library will not be using any files to store reports, otherwise (also if this parameter is not specified) the library will store unsent messages in files
+- `useDatabase` - boolean value, default `true` (also if this parameter is not specified) the library will store unsent messages in files, if `false` library will not be using any files to store reports
 - `maxDatabaseSize` - maximum database size in bytes, by default size is unlimited
 - `maxDatabaseRecordCount` - number of times library will try to send the error report again if sending will finished with fail
 - `maxDatabaseRetryLimit` - maximum number of messages in database. If a limit is set, the oldest error reports will be deleted if there will be try to exceed the limit
@@ -55,7 +55,7 @@ log4j.appender.backtrace.submissionToken=<submissionToken>
 By default Backtrace is sending all messages asynchronously and doesn't block main thread. You can wait until all currently messages will be sent with executing method `await`. Optionally as a parameter to `await` method you can pass the maximum time you want to wait for that.
 
 ```java
-BacktraceAppender backtrace = (BacktraceAppender) Logger.getRootLogger().getAppender(BacktraceAppender.NAME);
+BacktraceAppender backtrace = (BacktraceAppender) Logger.getRootLogger().getAppender("backtrace");
 backtrace.await();
 ```
 
@@ -63,6 +63,6 @@ backtrace.await();
 To make sure that all resources allocated by the library are released, call the `close` method. This method will send the currently processed message and then free all resources. Below you can find example how to do it.
 
 ```java
-BacktraceAppender backtrace = (BacktraceAppender) Logger.getRootLogger().getAppender(BacktraceAppender.NAME);
+BacktraceAppender backtrace = (BacktraceAppender) Logger.getRootLogger().getAppender("backtrace");
 backtrace.close();
 ```
