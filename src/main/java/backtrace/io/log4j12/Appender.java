@@ -328,7 +328,7 @@ public class Appender extends AppenderSkeleton {
 
         if (throwableInformation != null) {
             Exception exception = (Exception) throwableInformation.getThrowable();
-            report = new BacktraceReport(exception, attributes);
+            report = new BacktraceReport(event.getRenderedMessage(), exception, attributes);
         } else {
             report = new BacktraceReport(event.getRenderedMessage(), attributes);
         }
