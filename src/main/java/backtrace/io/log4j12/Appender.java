@@ -19,6 +19,7 @@ public class Appender extends AppenderSkeleton {
     private final static String ATTRIBUTE_LOGGING_LEVEL_NAME = "log_level";
     // Backtrace config
     private BacktraceClient backtraceClient;
+    private boolean allThreads = true;
     private String endpointUrl;
     private String submissionToken;
     private String submissionUrl;
@@ -62,6 +63,14 @@ public class Appender extends AppenderSkeleton {
 
     private void setBacktraceClient(BacktraceClient backtraceClient) {
         this.backtraceClient = backtraceClient;
+    }
+
+    public boolean isAllThreads() {
+        return allThreads;
+    }
+
+    public void setAllThreads(boolean allThreads) {
+        this.allThreads = allThreads;
     }
 
     private String getEndpointUrl() {
@@ -160,6 +169,7 @@ public class Appender extends AppenderSkeleton {
     @Override
     public void activateOptions() {
         BacktraceConfig config = createBacktraceConfig();
+        config.setGatherAllThreads(allThreads);
         this.configureBacktraceDatabaseSettings(config);
 
         BacktraceClient backtraceClient = new BacktraceClient(config);

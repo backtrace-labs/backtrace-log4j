@@ -44,6 +44,7 @@ log4j.appender.backtrace.submissionToken=<submissionToken>
 - `threshold` - minimum threshold of what kind of messages are to be sent, eg. `DEBUG`, `WARN`, `ERROR`
 - `appVersion` - string value which represents your's application version
 - `appName` - string value which represents your's application name
+- `allThreads` - boolean value, default `true` (also if this parameter is not specified) the library will gather information about all threads. If `false` library will gather only information from thread in which caused exception
 - `enableUncaughtExceptionHandler` - boolean value, if `true` library will catch all uncaught exceptions and send to server
 - `useDatabase` - boolean value, default `true` (also if this parameter is not specified) the library will store unsent messages in files, if `false` library will not be using any files to store reports
 - `maxDatabaseSize` - maximum database size in bytes, by default size is unlimited
