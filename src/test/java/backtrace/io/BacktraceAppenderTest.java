@@ -3,8 +3,8 @@ package backtrace.io;
 import backtrace.io.data.BacktraceData;
 import backtrace.io.events.RequestHandler;
 import backtrace.io.http.BacktraceResult;
-import backtrace.io.mock.BacktraceAppenderMock;
 import backtrace.io.log4j12.Appender;
+import backtrace.io.log4j12.BacktraceAppenderMock;
 import net.jodah.concurrentunit.Waiter;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
@@ -18,7 +18,6 @@ import org.slf4j.MDC;
 import java.util.concurrent.TimeUnit;
 
 public class BacktraceAppenderTest {
-    private final static String LOGGING_LEVEL_ATTRIBUTE_NAME = "log_level";
     private final static String URL = "https://backtrace.io/";
     private final Logger testLogger = new Logger(null) {
     };

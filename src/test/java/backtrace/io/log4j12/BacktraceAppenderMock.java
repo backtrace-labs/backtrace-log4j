@@ -1,9 +1,11 @@
-package backtrace.io.mock;
+package backtrace.io.log4j12;
 
 import backtrace.io.BacktraceConfig;
+import backtrace.io.data.BacktraceReport;
 import backtrace.io.log4j12.Appender;
+import org.apache.log4j.spi.LoggingEvent;
 
-public class BacktraceAppenderMock extends Appender {
+public final class BacktraceAppenderMock extends Appender {
     private BacktraceConfig config;
 
     public void setBacktraceConfig(BacktraceConfig config) {
@@ -15,7 +17,7 @@ public class BacktraceAppenderMock extends Appender {
     }
 
     @Override
-    protected BacktraceConfig createBacktraceConfig() {
+    public BacktraceConfig createBacktraceConfig() {
         return getBacktraceConfig();
     }
 }

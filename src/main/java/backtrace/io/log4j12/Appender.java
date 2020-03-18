@@ -243,7 +243,7 @@ public class Appender extends AppenderSkeleton {
      *
      * @return Backtrace library configuration
      */
-    protected BacktraceConfig createBacktraceConfig() {
+    BacktraceConfig createBacktraceConfig() {
         String submissionUrl = this.getSubmissionUrl();
         if (isStringNotEmpty(submissionUrl)) {
             return new BacktraceConfig(submissionUrl);

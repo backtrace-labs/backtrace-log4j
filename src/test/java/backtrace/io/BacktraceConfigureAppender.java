@@ -1,6 +1,6 @@
 package backtrace.io;
 
-import backtrace.io.mock.BacktraceAppenderMock;
+import backtrace.io.log4j12.BacktraceAppenderMock;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
