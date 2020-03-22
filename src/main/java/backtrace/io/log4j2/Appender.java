@@ -1,5 +1,6 @@
 package backtrace.io.log4j2;
 
+
 import backtrace.io.BacktraceClient;
 import backtrace.io.BacktraceConfig;
 import backtrace.io.data.BacktraceReport;
@@ -61,6 +62,7 @@ public class Appender extends AbstractAppender {
             @PluginAttribute("maxDatabaseRecordCount") Integer maxDatabaseRecordCount,
             @PluginAttribute("maxDatabaseRetryLimit") Integer maxDatabaseRetryLimit
     ) {
+        System.out.println("Creating!"); // TODO: remove
         if (name == null) {
             LOGGER.error("No name provided for BacktraceAppender");
             return null;
@@ -162,7 +164,7 @@ public class Appender extends AbstractAppender {
                                                  Integer maxDatabaseRecordCount, Integer maxDatabaseRetryLimit) {
         BacktraceConfig backtraceConfig = isStringNotEmpty(submissionUrl) ? new BacktraceConfig(submissionUrl) : new BacktraceConfig(endpointUrl, submissionToken);
 
-        if (useDatabase) {
+        if (!useDatabase) {
             backtraceConfig.disableDatabase();
             return backtraceConfig;
         }

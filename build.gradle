@@ -10,15 +10,15 @@ version = '1.0.0-SNAPSHOT'
 repositories {
     jcenter()
     maven {
-        url "https://oss.sonatype.org/content/repositories/comgithubbacktrace-labs-1020/"
+        url "https://oss.sonatype.org/content/repositories/comgithubbacktrace-labs-1022/"
     }
 }
 
 dependencies {
     implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:1.0.0'
-//    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.9'
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.13.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.1'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.13.1'
     testImplementation 'org.powermock:powermock-api-mockito2:2.0.0'
     testImplementation 'org.powermock:powermock-module-junit4:2.0.0'
     testImplementation 'net.jodah:concurrentunit:0.4.4'
