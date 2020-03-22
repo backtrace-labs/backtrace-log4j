@@ -67,3 +67,14 @@ To make sure that all resources allocated by the library are released, call the 
 BacktraceAppender backtrace = (BacktraceAppender) Logger.getRootLogger().getAppender("backtrace");
 backtrace.close();
 ```
+
+# Debugging library
+If you want to disable all logs which comes from this library add to `log4j.properties` file following line.
+```java
+log4j.logger.backtrace.io=OFF
+```
+
+You can also set the level with which you want to receive logs from this library, eg. ERROR, INFORM or DEBUG.
+```java
+log4j.logger.backtrace.io=ERROR
+```
