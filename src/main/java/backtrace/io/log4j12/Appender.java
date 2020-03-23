@@ -19,7 +19,7 @@ public class Appender extends AppenderSkeleton {
     private final static String ATTRIBUTE_LOGGING_LEVEL_NAME = "log_level";
     // Backtrace config
     private BacktraceClient backtraceClient;
-    private boolean allThreads = true;
+    private boolean allThreads = false;
     private String endpointUrl;
     private String submissionToken;
     private String submissionUrl;
