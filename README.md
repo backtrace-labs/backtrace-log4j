@@ -4,9 +4,6 @@
 [Backtrace](http://backtrace.io/) provides support for log4j by providing a special appender that can be connected to any application to send logged information also to the Backtrace dashboard. BacktraceAppender sends also MDC properties and using offline database for error report storage and re-submission in case of network outage. 
 
 # Installation via Gradle or Maven<a name="installation"></a>
-Will be added after first release.
-
-<!--
 * Gradle
 ```
 dependencies {
@@ -22,7 +19,7 @@ dependencies {
   <version>0.9.0</version>
 </dependency>
 ```
--->
+
 
 # Configuration
 
