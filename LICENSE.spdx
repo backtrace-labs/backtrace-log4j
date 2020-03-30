@@ -1,0 +1,7 @@
+SPDXVersion: SPDX-2.0
+DataLicense: CC0-1.0
+Creator: Backtrace I/O
+PackageName: backtrace-log4j
+PackageOriginator: Backtrace I/O
+PackageHomePage: https://github.com/backtrace-labs/backtrace-log4j
+PackageLicenseDeclared: MIT

@@ -1,0 +1,23 @@
+plugins {
+    id 'java-library'
+}
+
+apply from: 'publish.gradle'
+
+group = 'com.github.backtrace.io'
+version = '0.9.0'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:0.9.0'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.9'
+    implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
+    testImplementation 'org.powermock:powermock-api-mockito2:2.0.0'
+    testImplementation 'org.powermock:powermock-module-junit4:2.0.0'
+    testImplementation 'net.jodah:concurrentunit:0.4.4'
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+}
