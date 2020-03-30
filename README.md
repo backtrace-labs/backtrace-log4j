@@ -1,3 +1,5 @@
+# This library is currently in early access
+
 # Backtrace Log4j support
 [Backtrace](http://backtrace.io/) provides support for log4j by providing a special appender that can be connected to any application to send logged information also to the Backtrace dashboard. BacktraceAppender sends also MDC properties and using offline database for error report storage and re-submission in case of network outage. 
 
@@ -8,7 +10,7 @@ Will be added after first release.
 * Gradle
 ```
 dependencies {
-    implementation 'com.github.backtrace-labs.backtrace-log4j:backtrace-log4j:1.0.0'
+    implementation 'com.github.backtrace-labs.backtrace-log4j:backtrace-log4j:0.9.0'
 }
 ```
 
@@ -17,7 +19,7 @@ dependencies {
 <dependency>
   <groupId>com.github.backtrace-labs.backtrace-log4j</groupId>
   <artifactId>backtrace-log4j</artifactId>
-  <version>1.0.0</version>
+  <version>0.9.0</version>
 </dependency>
 ```
 -->
