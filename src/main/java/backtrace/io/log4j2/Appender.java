@@ -4,6 +4,8 @@ package backtrace.io.log4j2;
 import backtrace.io.BacktraceClient;
 import backtrace.io.BacktraceConfig;
 import backtrace.io.data.BacktraceReport;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.core.*;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.config.Property;
@@ -11,6 +13,7 @@ import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
+import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.status.StatusLogger;
 
 import java.io.Serializable;
@@ -32,17 +35,7 @@ public class Appender extends AbstractAppender {
     Appender(BacktraceClient backtraceClient, String name, Filter filter, Layout<? extends Serializable> layout, boolean ignoreExceptions, Property[] properties) {
         super(name, filter, layout, ignoreExceptions, properties);
         this.backtraceClient = backtraceClient;
-
-
-//        this.addFilter(new Filter() {
-//            @Override
-//            private Result filter(String loggerName) {
-//                if (loggerName != null && loggerName.startsWith(NAME)) {
-//                    return Result.DENY;
-//                }
-//                return Result.NEUTRAL;
-//            }
-//        });
+        this.addFilter(new BacktraceLogsFilter());
     }
 
     @PluginFactory
