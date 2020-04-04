@@ -5,17 +5,16 @@ plugins {
 apply from: 'publish.gradle'
 
 group = 'com.github.backtrace.io'
-version = '1.0.0-SNAPSHOT'
+
+version = '0.9.0'
 
 repositories {
     jcenter()
-    maven {
-        url "https://oss.sonatype.org/content/repositories/comgithubbacktrace-labs-1022/"
-    }
 }
 
 dependencies {
-    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:1.0.0'
+    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:0.9.0'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.9'
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.13.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.13.1'
