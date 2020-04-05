@@ -3,9 +3,8 @@ package backtrace.io.log4j2;
 
 import backtrace.io.BacktraceClient;
 import backtrace.io.BacktraceConfig;
+import backtrace.io.log4j2.BacktraceLogsFilter;
 import backtrace.io.data.BacktraceReport;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.core.*;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.config.Property;
@@ -13,7 +12,6 @@ import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
-import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.status.StatusLogger;
 
 import java.io.Serializable;
@@ -25,14 +23,14 @@ import java.util.concurrent.TimeUnit;
         name = "BacktraceAppender",
         category = Core.CATEGORY_NAME,
         elementType = org.apache.logging.log4j.core.Appender.ELEMENT_TYPE)
+
 public class Appender extends AbstractAppender {
     private BacktraceClient backtraceClient;
 
-    public final static String NAME = "backtrace";
     private final StatusLogger internalLogger = StatusLogger.getLogger();
     private final static String ATTRIBUTE_LOGGING_LEVEL_NAME = "log_level";
 
-    Appender(BacktraceClient backtraceClient, String name, Filter filter, Layout<? extends Serializable> layout, boolean ignoreExceptions, Property[] properties) {
+    protected Appender(BacktraceClient backtraceClient, String name, Filter filter, Layout<? extends Serializable> layout, boolean ignoreExceptions, Property[] properties) {
         super(name, filter, layout, ignoreExceptions, properties);
         this.backtraceClient = backtraceClient;
         this.addFilter(new BacktraceLogsFilter());
@@ -70,19 +68,6 @@ public class Appender extends AbstractAppender {
         return new Appender(backtraceClient, name, filter, layout, true, null);
     }
 
-//
-//    public BacktraceAppender() {
-//        this.addFilter(new Filter() {
-//            @Override
-//            public int decide(LoggingEvent event) {
-//                String loggerName = event.getLoggerName();
-//                if (loggerName != null && loggerName.startsWith(NAME)) {
-//                    return Filter.DENY;
-//                }
-//                return Filter.NEUTRAL;
-//            }
-//        });
-//    }
 
     /**
      * Check is passed string is not null and not empty otherwise true
@@ -152,7 +137,7 @@ public class Appender extends AbstractAppender {
      *
      * @return Backtrace library configuration
      */
-    private static BacktraceConfig createBacktraceConfig(String submissionUrl, String endpointUrl, String submissionToken,
+    static BacktraceConfig createBacktraceConfig(String submissionUrl, String endpointUrl, String submissionToken,
                                                  boolean useDatabase, Long maxDatabaseSize,
                                                  Integer maxDatabaseRecordCount, Integer maxDatabaseRetryLimit) {
         BacktraceConfig backtraceConfig = isStringNotEmpty(submissionUrl) ? new BacktraceConfig(submissionUrl) : new BacktraceConfig(endpointUrl, submissionToken);
