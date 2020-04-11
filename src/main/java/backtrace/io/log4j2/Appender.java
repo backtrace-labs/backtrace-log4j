@@ -4,7 +4,10 @@ package backtrace.io.log4j2;
 import backtrace.io.BacktraceClient;
 import backtrace.io.BacktraceConfig;
 import backtrace.io.data.BacktraceReport;
-import org.apache.logging.log4j.core.*;
+import org.apache.logging.log4j.core.Core;
+import org.apache.logging.log4j.core.Filter;
+import org.apache.logging.log4j.core.Layout;
+import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.config.Property;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
@@ -37,7 +40,6 @@ public class Appender extends AbstractAppender {
 
     @PluginFactory
     @SuppressWarnings("unused")
-
     public static Appender createAppender(
             @PluginAttribute("name") String name,
             @PluginElement("Layout") Layout<? extends Serializable> layout,
@@ -78,7 +80,7 @@ public class Appender extends AbstractAppender {
         // Null-safe, short-circuit evaluation.
         return !(s == null || s.trim().isEmpty());
     }
-    
+
     /**
      * Send log message to Backtrace console
      */
@@ -163,10 +165,11 @@ public class Appender extends AbstractAppender {
 
     /**
      * Configure Backtrace Client - enable uncaught exception handler, set app name and app version
-     * @param config library configuration
+     *
+     * @param config                           library configuration
      * @param isEnableUncaughtExceptionHandler is uncaught exception handler should be enabled
-     * @param appName application name
-     * @param appVersion application version
+     * @param appName                          application name
+     * @param appVersion                       application version
      * @return configured Backtrace Client instance
      */
     static BacktraceClient createBacktraceClient(BacktraceConfig config, boolean isEnableUncaughtExceptionHandler, String appName, String appVersion) {
@@ -226,5 +229,5 @@ public class Appender extends AbstractAppender {
         }
         return report;
     }
-    
+
 }
