@@ -3,7 +3,6 @@ package backtrace.io.log4j2;
 
 import backtrace.io.BacktraceClient;
 import backtrace.io.BacktraceConfig;
-import backtrace.io.log4j2.BacktraceLogsFilter;
 import backtrace.io.data.BacktraceReport;
 import org.apache.logging.log4j.core.*;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
@@ -164,10 +163,10 @@ public class Appender extends AbstractAppender {
 
     /**
      * Configure Backtrace Client - enable uncaught exception handler, set app name and app version
-     * @param config
-     * @param isEnableUncaughtExceptionHandler
-     * @param appName
-     * @param appVersion
+     * @param config library configuration
+     * @param isEnableUncaughtExceptionHandler is uncaught exception handler should be enabled
+     * @param appName application name
+     * @param appVersion application version
      * @return configured Backtrace Client instance
      */
     static BacktraceClient createBacktraceClient(BacktraceConfig config, boolean isEnableUncaughtExceptionHandler, String appName, String appVersion) {
