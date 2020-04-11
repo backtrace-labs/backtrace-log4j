@@ -100,7 +100,7 @@ public class Appender extends AbstractAppender {
      */
     @Override
     public void stop() {
-//        LogLog.debug("Closing BacktraceAppender");
+        internalLogger.debug("Closing BacktraceAppender");
         try {
             super.stop();
             this.backtraceClient.close();
