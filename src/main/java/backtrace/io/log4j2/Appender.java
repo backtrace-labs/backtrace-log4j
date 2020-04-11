@@ -37,22 +37,22 @@ public class Appender extends AbstractAppender {
 
     @PluginFactory
     @SuppressWarnings("unused")
+
     public static Appender createAppender(
             @PluginAttribute("name") String name,
             @PluginElement("Layout") Layout<? extends Serializable> layout,
             @PluginElement("Filter") final Filter filter,
-            @PluginAttribute("endpointUrl") String endpointUrl,
-            @PluginAttribute("submissionToken") String submissionToken,
-            @PluginAttribute("submissionUrl") String submissionUrl,
-            @PluginAttribute("enableUncaughtExceptionHandler") boolean enableUncaughtExceptionHandler,
-            @PluginAttribute("appVersion") String appVersion,
-            @PluginAttribute("appName") String appName,
-            @PluginAttribute("useDatabase") boolean useDatabase,
-            @PluginAttribute("maxDatabaseSize") long maxDatabaseSize,
-            @PluginAttribute("maxDatabaseRecordCount") Integer maxDatabaseRecordCount,
-            @PluginAttribute("maxDatabaseRetryLimit") Integer maxDatabaseRetryLimit
+            @PluginAttribute(value = "endpointUrl") String endpointUrl,
+            @PluginAttribute(value = "submissionToken") String submissionToken,
+            @PluginAttribute(value = "submissionUrl") String submissionUrl,
+            @PluginAttribute(value = "enableUncaughtExceptionHandler") Boolean enableUncaughtExceptionHandler,
+            @PluginAttribute(value = "appVersion") String appVersion,
+            @PluginAttribute(value = "appName") String appName,
+            @PluginAttribute(value = "useDatabase") boolean useDatabase,
+            @PluginAttribute(value = "maxDatabaseSize", defaultLong = -1) long maxDatabaseSize, // -1 is unlimited
+            @PluginAttribute(value = "maxDatabaseRecordCount", defaultInt = -1) int maxDatabaseRecordCount, // -1 is unlimited
+            @PluginAttribute(value = "maxDatabaseRetryLimit", defaultInt = 3) int maxDatabaseRetryLimit
     ) {
-        System.out.println("Creating!"); // TODO: remove
         if (name == null) {
             LOGGER.error("No name provided for BacktraceAppender");
             return null;
@@ -226,6 +226,5 @@ public class Appender extends AbstractAppender {
         }
         return report;
     }
-
-
+    
 }
