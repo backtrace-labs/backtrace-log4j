@@ -13,7 +13,6 @@ import java.io.Serializable;
 
 
 public final class AppenderMock extends Appender {
-    private static BacktraceConfig config;
 
     public AppenderMock(BacktraceClient backtraceClient, String name, Filter filter, Layout<? extends Serializable> layout, boolean ignoreExceptions, Property[] properties) {
         super(backtraceClient, name, filter, layout, ignoreExceptions, properties);
@@ -22,7 +21,6 @@ public final class AppenderMock extends Appender {
     public static BacktraceConfig createBacktraceConfig(String submissionUrl, String endpointUrl, String submissionToken,
                                                  boolean useDatabase, Long maxDatabaseSize,
                                                  Integer maxDatabaseRecordCount, Integer maxDatabaseRetryLimit) {
-
         return Appender.createBacktraceConfig(submissionUrl, endpointUrl, submissionToken,
                     useDatabase, maxDatabaseSize,
                     maxDatabaseRecordCount, maxDatabaseRetryLimit);

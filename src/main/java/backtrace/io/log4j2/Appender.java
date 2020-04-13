@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
         elementType = org.apache.logging.log4j.core.Appender.ELEMENT_TYPE)
 
 public class Appender extends AbstractAppender {
-    private BacktraceClient backtraceClient;
+    private final BacktraceClient backtraceClient;
 
     private final StatusLogger internalLogger = StatusLogger.getLogger();
     private final static String ATTRIBUTE_LOGGING_LEVEL_NAME = "log_level";
@@ -69,6 +69,9 @@ public class Appender extends AbstractAppender {
         return new Appender(backtraceClient, name, filter, layout, true, null);
     }
 
+    BacktraceClient getBacktraceClient() {
+        return backtraceClient;
+    }
 
     /**
      * Check is passed string is not null and not empty otherwise true
@@ -92,7 +95,7 @@ public class Appender extends AbstractAppender {
 
         internalLogger.debug("Sending report with message " + logEvent.getMessage().getFormattedMessage());
         BacktraceReport report = createBacktraceReport(logEvent);
-        this.backtraceClient.send(report);
+        this.getBacktraceClient().send(report);
     }
 
 
@@ -104,7 +107,7 @@ public class Appender extends AbstractAppender {
         internalLogger.debug("Closing BacktraceAppender");
         try {
             super.stop();
-            this.backtraceClient.close();
+            this.getBacktraceClient().close();
         } catch (InterruptedException e) {
             internalLogger.error("Error occurs during closing Backtrace client", e);
         }
@@ -117,7 +120,7 @@ public class Appender extends AbstractAppender {
      * @throws InterruptedException if the current thread is interrupted while waiting
      */
     public void await() throws InterruptedException {
-        this.backtraceClient.await();
+        this.getBacktraceClient().await();
     }
 
     /**
@@ -130,7 +133,7 @@ public class Appender extends AbstractAppender {
      * @throws InterruptedException if the current thread is interrupted while waiting
      */
     public boolean await(long timeout, TimeUnit unit) throws InterruptedException {
-        return this.backtraceClient.await(timeout, unit);
+        return this.getBacktraceClient().await(timeout, unit);
     }
 
     /**
@@ -172,7 +175,7 @@ public class Appender extends AbstractAppender {
      * @param appVersion                       application version
      * @return configured Backtrace Client instance
      */
-    private static BacktraceClient createBacktraceClient(BacktraceConfig config, boolean isEnableUncaughtExceptionHandler, String appName, String appVersion) {
+    static BacktraceClient createBacktraceClient(BacktraceConfig config, boolean isEnableUncaughtExceptionHandler, String appName, String appVersion) {
 
         BacktraceClient client = new BacktraceClient(config);
         if (isEnableUncaughtExceptionHandler) {

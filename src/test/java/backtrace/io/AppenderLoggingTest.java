@@ -18,7 +18,7 @@ import org.slf4j.event.LoggingEvent;
 
 import java.util.concurrent.TimeUnit;
 
-public class AppenderTest {
+public class AppenderLoggingTest {
 
     private final static String URL = "https://backtrace.io/";
 
