@@ -16,6 +16,8 @@ import org.junit.Test;
 import org.slf4j.MDC;
 import org.slf4j.event.LoggingEvent;
 
+import java.util.concurrent.TimeUnit;
+
 public class AppenderTest {
 
     private final static String URL = "https://backtrace.io/";
@@ -27,6 +29,38 @@ public class AppenderTest {
     public void init() {
         this.config = new BacktraceConfig(URL);
         this.config.disableDatabase();
+    }
+
+    @Test
+    public void appendMessageAndNull() throws Exception {
+        // GIVEN
+        final Waiter waiter = new Waiter();
+        final BacktraceClient client = new BacktraceClient(config);
+        client.setCustomRequestHandler(new RequestHandler() {
+            @Override
+            public BacktraceResult onRequest(BacktraceData data) {
+                waiter.resume();
+                return BacktraceResult.onSuccess(data.getReport(), data.getReport().getMessage());
+            }
+        });
+
+        // WHEN
+        Appender appender = new AppenderMock(client, "backtrace", null, null, false, null);
+
+
+        // WHEN
+        final LogEvent logEvent = Log4jLogEvent.newBuilder()
+                .setLevel(Level.DEBUG)
+                .setLoggerName("backtrace")
+                .setMessage(new SimpleMessage(message))
+                .build();
+
+        appender.append(null);
+        appender.append(logEvent);
+
+        // THEN
+        waiter.await(1000, 1);
+        appender.stop();
     }
 
     @Test
@@ -89,8 +123,9 @@ public class AppenderTest {
         appender.append(logEvent);
 
         // THEN
+        appender.await(2000, TimeUnit.MILLISECONDS);
+        waiter.await(500, 4);
         appender.stop();
-        waiter.await(2000, 4);
     }
 
     @Test

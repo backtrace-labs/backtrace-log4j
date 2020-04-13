@@ -1,3 +1,5 @@
+package backtrace.io;
+
 import backtrace.io.data.BacktraceReport;
 import backtrace.io.log4j2.Appender;
 import backtrace.io.log4j2.AppenderMock;
