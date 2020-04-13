@@ -44,7 +44,7 @@ public class BacktraceLoggerTest {
     }
 
     @Test
-    public void allowForMessagesFromOtherThanBacktraceLogger() throws TimeoutException {
+    public void allowForMessagesFromOtherThanBacktraceLogger() throws TimeoutException, InterruptedException {
         // GIVEN
         String name = "com.test.Demo";
         Waiter waiter = new Waiter();
@@ -69,6 +69,7 @@ public class BacktraceLoggerTest {
 
         // THEN
         waiter.await(1000, 1);
+        appender.await();
         appender.stop();
     }
 }

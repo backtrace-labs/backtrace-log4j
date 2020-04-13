@@ -99,7 +99,6 @@ public class AppenderTest {
         final Waiter waiter = new Waiter();
         final String key = "test-key";
         final String value = "test-value";
-        MDC.put(key, value);
 
         config.setRequestHandler(new RequestHandler() {
             @Override
@@ -116,6 +115,7 @@ public class AppenderTest {
         Appender appender = new AppenderMock(client, "backtrace", null, null, false, null);
 
         // WHEN
+        MDC.put(key, value);
         final LogEvent logEvent = Log4jLogEvent.newBuilder()
                 .setLevel(Level.DEBUG)
                 .setLoggerName("backtrace")
