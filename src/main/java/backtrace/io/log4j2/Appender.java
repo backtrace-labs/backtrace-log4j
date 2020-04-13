@@ -172,7 +172,7 @@ public class Appender extends AbstractAppender {
      * @param appVersion                       application version
      * @return configured Backtrace Client instance
      */
-    static BacktraceClient createBacktraceClient(BacktraceConfig config, boolean isEnableUncaughtExceptionHandler, String appName, String appVersion) {
+    private static BacktraceClient createBacktraceClient(BacktraceConfig config, boolean isEnableUncaughtExceptionHandler, String appName, String appVersion) {
 
         BacktraceClient client = new BacktraceClient(config);
         if (isEnableUncaughtExceptionHandler) {

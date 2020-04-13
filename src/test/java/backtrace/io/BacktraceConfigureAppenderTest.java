@@ -4,12 +4,13 @@ import backtrace.io.log4j2.AppenderMock;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class BacktraceConfigureAppender {
+public class BacktraceConfigureAppenderTest {
 
-    private final int maxDatabaseRecordCount = 1;
-    private final long maxDatabaseSize = 2;
-    private final int maxRetryLimit = 3;
-    private final String url = "https://backtrace.io/";
+    private final int MAX_DATABASE_RECORD_COUNT = 1;
+    private final long MAX_DATABASE_SIZE = 2;
+    private final int MAX_RETRY_LIMIT = 3;
+    private final String URL = "https://backtrace.io/";
+
     @Test
     public void configureConfig() {
         // GIVEN
@@ -18,8 +19,8 @@ public class BacktraceConfigureAppender {
 
 
         // WHEN
-        BacktraceConfig preparedConfig = AppenderMock.createBacktraceConfig(url, null, null,
-                useDatabase, maxDatabaseSize, maxDatabaseRecordCount, maxRetryLimit);
+        BacktraceConfig preparedConfig = AppenderMock.createBacktraceConfig(URL, null, null,
+                useDatabase, MAX_DATABASE_SIZE, MAX_DATABASE_RECORD_COUNT, MAX_RETRY_LIMIT);
 
         // THEN
         int actualMaxDatabaseRecordCount = preparedConfig.getDatabaseConfig().getDatabaseMaxRecordCount();
@@ -28,10 +29,10 @@ public class BacktraceConfigureAppender {
         String actualUrl = preparedConfig.getSubmissionUrl();
 
         Assert.assertTrue(preparedConfig.getDatabaseConfig().isDatabaseEnabled());
-        Assert.assertEquals(maxDatabaseRecordCount, actualMaxDatabaseRecordCount);
-        Assert.assertEquals(maxDatabaseSize, actualMaxSize);
-        Assert.assertEquals(maxRetryLimit, actualRetryLimit);
-        Assert.assertEquals(url, actualUrl);
+        Assert.assertEquals(MAX_DATABASE_RECORD_COUNT, actualMaxDatabaseRecordCount);
+        Assert.assertEquals(MAX_DATABASE_SIZE, actualMaxSize);
+        Assert.assertEquals(MAX_RETRY_LIMIT, actualRetryLimit);
+        Assert.assertEquals(URL, actualUrl);
     }
 
     @Test
@@ -40,8 +41,8 @@ public class BacktraceConfigureAppender {
         boolean useDatabase = false;
 
         // WHEN
-        BacktraceConfig preparedConfig = AppenderMock.createBacktraceConfig(url, "", "",
-                useDatabase, maxDatabaseSize, maxDatabaseRecordCount, maxRetryLimit);
+        BacktraceConfig preparedConfig = AppenderMock.createBacktraceConfig(URL, "", "",
+                useDatabase, MAX_DATABASE_SIZE, MAX_DATABASE_RECORD_COUNT, MAX_RETRY_LIMIT);
 
         // THEN
         boolean isDatabaseEnabled = preparedConfig.getDatabaseConfig().isDatabaseEnabled();
