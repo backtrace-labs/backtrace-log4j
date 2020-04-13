@@ -9,12 +9,10 @@ import net.jodah.concurrentunit.Waiter;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.impl.Log4jLogEvent;
-import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.SimpleMessage;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.MDC;
-import org.slf4j.event.LoggingEvent;
 
 import java.util.concurrent.TimeUnit;
 

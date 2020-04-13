@@ -1,7 +1,6 @@
 package backtrace.io;
 
 import backtrace.io.data.BacktraceReport;
-import backtrace.io.log4j2.Appender;
 import backtrace.io.log4j2.AppenderMock;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

@@ -20,7 +20,7 @@ import java.util.concurrent.TimeoutException;
 public class AppenderTest {
 
     @Test
-    public void createAppenderWithoutName(){
+    public void createAppenderWithoutName() {
         // GIVEN
         final String appenderName = null;
 

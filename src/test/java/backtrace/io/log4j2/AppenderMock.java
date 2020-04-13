@@ -19,15 +19,15 @@ public final class AppenderMock extends Appender {
     }
 
     public static BacktraceConfig createBacktraceConfig(String submissionUrl, String endpointUrl, String submissionToken,
-                                                 boolean useDatabase, Long maxDatabaseSize,
-                                                 Integer maxDatabaseRecordCount, Integer maxDatabaseRetryLimit) {
+                                                        boolean useDatabase, Long maxDatabaseSize,
+                                                        Integer maxDatabaseRecordCount, Integer maxDatabaseRetryLimit) {
         return Appender.createBacktraceConfig(submissionUrl, endpointUrl, submissionToken,
-                    useDatabase, maxDatabaseSize,
-                    maxDatabaseRecordCount, maxDatabaseRetryLimit);
+                useDatabase, maxDatabaseSize,
+                maxDatabaseRecordCount, maxDatabaseRetryLimit);
     }
 
 
-    public static BacktraceReport createBacktraceReport(LogEvent logEvent){
+    public static BacktraceReport createBacktraceReport(LogEvent logEvent) {
         return Appender.createBacktraceReport(logEvent);
     }
 }

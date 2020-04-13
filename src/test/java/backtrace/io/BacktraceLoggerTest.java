@@ -1,9 +1,9 @@
 package backtrace.io;
 
-import backtrace.io.log4j2.Appender;
 import backtrace.io.data.BacktraceData;
 import backtrace.io.events.RequestHandler;
 import backtrace.io.http.BacktraceResult;
+import backtrace.io.log4j2.Appender;
 import backtrace.io.log4j2.AppenderMock;
 import net.jodah.concurrentunit.Waiter;
 import org.apache.logging.log4j.LogManager;
