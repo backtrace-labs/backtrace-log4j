@@ -1,15 +1,22 @@
 package backtrace.io.log4j2;
 
 import backtrace.io.data.BacktraceData;
+import backtrace.io.data.BacktraceReport;
 import backtrace.io.events.RequestHandler;
 import backtrace.io.http.BacktraceResult;
 import net.jodah.concurrentunit.Waiter;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.impl.Log4jLogEvent;
 import org.apache.logging.log4j.message.SimpleMessage;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 public class AppenderTest {
 
     @Test
@@ -34,8 +41,8 @@ public class AppenderTest {
         final String appName = "backtrace-app";
         final String appVersion = "1.0.0";
 
-        Appender appender = AppenderMock.createAppender("backtrace", null, null, null, null,
-                "https://backtrace.io/", false, appVersion,
+        Appender appender = AppenderMock.createAppender("backtrace", null, null, "https://backtrace.io/", "token",
+                null, false, appVersion,
                 appName, false, 0, 0, 0);
 
         // WHEN
@@ -61,6 +68,43 @@ public class AppenderTest {
 
         // THEN
         waiter.await(1000, 1);
+        appender.stop();
+    }
+
+    @Test
+    public void testUncaughtExceptionHandler() {
+        // GIVEN
+        final Waiter waiter = new Waiter();
+        Appender appender = AppenderMock.createAppender("backtrace", null, null, "https://backtrace.io/", "token",
+                null, true, null,
+                null, false, 0, 0, 0);
+
+        appender.getBacktraceClient().setCustomRequestHandler(new RequestHandler() {
+            @Override
+            public BacktraceResult onRequest(BacktraceData data) {
+                waiter.resume();
+                return BacktraceResult.onSuccess(new BacktraceReport("test"), "test");
+            }
+        });
+
+        // WHEN
+        Thread testThread = new Thread() {
+            public void run() {
+                Logger logger = (org.apache.logging.log4j.core.Logger) LogManager.getLogger("another-thread");
+                appender.start();
+                logger.addAppender(appender);
+                throw new RuntimeException("Expected!");
+            }
+        };
+        testThread.start();
+
+        // THEN
+        try {
+            testThread.join();
+            waiter.await(2, TimeUnit.SECONDS);
+        } catch (InterruptedException | TimeoutException exception) {
+            Assert.fail(exception.getMessage());
+        }
         appender.stop();
     }
 }
