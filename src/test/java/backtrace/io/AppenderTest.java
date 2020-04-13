@@ -43,7 +43,6 @@ public class AppenderTest {
         });
 
         // WHEN
-        AppenderMock.setBacktraceConfig(config);
         Appender appender = new AppenderMock(client, "backtrace", null, null, false, null);
 
 

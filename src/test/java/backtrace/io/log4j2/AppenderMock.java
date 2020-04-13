@@ -17,10 +17,17 @@ public final class AppenderMock extends Appender {
         super(backtraceClient, name, filter, layout, ignoreExceptions, properties);
     }
 
-    static BacktraceConfig createBacktraceConfig(String submissionUrl, String endpointUrl, String submissionToken,
+    public static BacktraceConfig getBacktraceConfig(){
+        return AppenderMock.config;
+    }
+
+    public static BacktraceConfig createBacktraceConfig(String submissionUrl, String endpointUrl, String submissionToken,
                                                  boolean useDatabase, Long maxDatabaseSize,
                                                  Integer maxDatabaseRecordCount, Integer maxDatabaseRetryLimit) {
-        return AppenderMock.config;
+
+        return Appender.createBacktraceConfig(submissionUrl, endpointUrl, submissionToken,
+                    useDatabase, maxDatabaseSize,
+                    maxDatabaseRecordCount, maxDatabaseRetryLimit);
     }
 
     public static void setBacktraceConfig(BacktraceConfig config) {
