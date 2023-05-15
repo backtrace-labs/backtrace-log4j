@@ -38,7 +38,7 @@ public class BacktraceLoggerTest {
     }
 
     @Test
-    public void allowForMessagesFromOtherThanBacktraceLogger() throws TimeoutException {
+    public void allowForMessagesFromOtherThanBacktraceLogger() throws TimeoutException, InterruptedException {
         // GIVEN
         Waiter waiter = new Waiter();
         BacktraceAppenderMock appender = new BacktraceAppenderMock();
