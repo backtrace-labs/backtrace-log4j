@@ -11,6 +11,7 @@ public class Demo {
 
         BasicConfigurator.configure();
         Logger logger = Logger.getLogger(Demo.class);
+
         try {
             int x = 0;
             int y = 0;
@@ -21,6 +22,6 @@ public class Demo {
 
         Appender x = (Appender) Logger.getRootLogger().getAppender("backtrace");
         x.await();
-        System.out.println("WORKS");
+        System.out.println("End");
     }
 }
