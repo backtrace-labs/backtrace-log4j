@@ -5,7 +5,7 @@ plugins {
 apply from: 'publish.gradle'
 
 group = 'com.github.backtrace.io'
-version = '0.9.6'
+version = '0.9.7'
 
 repositories {
     jcenter()
@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:0.9.6'
+    implementation 'com.github.backtrace-labs.backtrace-java:backtrace-java:0.9.7'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.7'
     implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '2.0.7'
     testImplementation 'org.powermock:powermock-api-mockito2:2.0.9'
